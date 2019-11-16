@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.dao.CheckGroupDao">
+    <!--插入检查组数据-->
+    <insert id="add" parameterType="com.itheima.pojo.CheckGroup">
+       <!--通过mybtis框架提供的标签获取CheckGroup的自增产生的id传给外界-->
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT into t_checkgroup(code,name,helpCode,sex,remark,attention)
+        VALUES(#{code},#{name},#{helpCode},#{sex},#{remark},#{attention})
+    </insert>
+    <!--检查组检查项多对多-->
+    <insert id="setCheckGroupAndCheckItem" parameterType="map">
+        INSERT INTO t_checkgroup_checkitem(checkgroup_id,checkitem_id)
+        VALUES(#{checkgroupId},#{checkitemId})
+    </insert>
+</mapper>
