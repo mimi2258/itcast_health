@@ -55,8 +55,13 @@ public class CheckItemServiceImpl implements CheckItemService{
         checkItemDao.edit(checkItem);
     }
 
-    @Override
+    //通过id查询对应的检查项
     public CheckItem findById(Integer id) {
         return checkItemDao.findById(id);
+    }
+
+    //查询所有检查项
+    public List<CheckItem> findAll() {
+        return checkItemDao.findAll();
     }
 }

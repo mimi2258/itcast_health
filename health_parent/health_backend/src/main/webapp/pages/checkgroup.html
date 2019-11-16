@@ -285,6 +285,24 @@
                 },
                 //添加
                 handleAdd () {
+                    //alert(this.checkitemIds);
+                    //发送ajax请求,将表单数据提交到后台进行处理
+                    axios.post("/checkgroup/add.do?checkitemIds="+this.checkitemIds,this.formData).then((res)=>{
+
+                        if (res.data.flag){//操作成功
+                            this.$message({
+                                type:'success',
+                                message:res.data.message
+                            });
+                        }else {//操作失败
+                            this.$message.error(res.data.message);
+                        }
+                    }).finally(()=>{
+                        //重新进行分页查询
+                        this.findPage();
+                        //关闭新增窗口(隐藏)
+                        this.dialogFormVisible = false;
+                    });
                 },
                 //分页查询
                 findPage() {
@@ -297,6 +315,17 @@
                 handleCreate() {
                     this.resetForm();
                     this.dialogFormVisible=true;
+                    this.activeName='first';//默认选中基本信息标签页
+                    this.checkitemIds=[];//重置复选框
+                    //发送ajax请求,查询所有检查项信息,转为json,赋值给tableData
+                    axios.get("/checkitem/findAll.do").then((res)=>{
+                        if(res.data.flag){//查询数据成功
+                            //给tableData赋值
+                            this.tableData=res.data.data;
+                        }else {//查询数据失败
+                            this.$message.error(res.data.message);
+                        }
+                    });
                 },
                 // 弹出编辑窗口
                 handleUpdate(row) {
