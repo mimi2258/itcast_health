@@ -17,4 +17,67 @@
         INSERT INTO t_checkgroup_checkitem(checkgroup_id,checkitem_id)
         VALUES(#{checkgroupId},#{checkitemId})
     </insert>
+
+    <!--分页-->
+    <select id="selectByCondition" parameterType="String" resultType="com.itheima.pojo.CheckGroup">
+        SELECT * FROM t_checkgroup
+        <if test="value !=null and value.length > 0">
+            WHERE code =#{value} or name =#{value} or helpCode =#{value}
+        </if>
+    </select>
+
+    <!--根据id查询检查组-->
+    <select id="findById" parameterType="int" resultType="com.itheima.pojo.CheckGroup">
+        SELECT * from t_checkgroup WHERE id=#{id}
+    </select>
+    <!--根据id查询关联表-->
+    <select id="findCheckItemIdsByCheckGroupId" parameterType="int" resultType="int">
+        SELECT checkitem_id from t_checkgroup_checkitem WHERE checkgroup_id=#{id}
+    </select>
+    <!--根据id动态修改检查组字段-->
+    <insert id="edit" parameterType="com.itheima.pojo.CheckGroup">
+        UPDATE t_checkgroup
+        <set>
+            <if test="code != null">
+                code=#{code},
+            </if>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="helpCode != null">
+                helpCode=#{helpCode},
+            </if>
+            <if test="sex != null">
+                sex=#{sex},
+            </if>
+            <if test="remark != null">
+                remark=#{remark},
+            </if>
+            <if test="attention != null">
+                attention=#{attention},
+            </if>
+        </set>
+        WHERE id=#{id}
+    </insert>
+
+    <!--根据检查组id删除关联的检查项-->
+    <delete id="deleteAssoication" parameterType="int">
+        DELETE from t_checkgroup_checkitem WHERE checkgroup_id = #{id}
+    </delete>
+    <!--根据检查组id查询其中检查项的个数-->
+    <select id="findCheckItemByCheckGroup" parameterType="int" resultType="int">
+        SELECT count(*) FROM t_checkgroup_checkitem WHERE checkgroup_id=#{id}
+    </select>
+    <!--根据id删除检查组-->
+    <delete id="deleteCheckGroupById" parameterType="int">
+        DELETE FROM t_checkgroup WHERE id=#{id}
+    </delete>
+    <!--根据id查询检查套餐关联表-->
+    <select id="findSetmealByCheckGroupId" parameterType="int" resultType="int">
+        SELECT COUNT(*) FROM t_setmeal_checkgroup WHERE checkgroup_id=#{id}
+    </select>
+    <!--查询所有检查组-->
+    <select id="findAll" resultType="com.itheima.pojo.CheckGroup">
+        SELECT * FROM t_checkgroup
+    </select>
 </mapper>
